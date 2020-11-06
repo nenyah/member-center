@@ -1,3 +1,10 @@
+<!--
+ * @Description: 
+ * @Author: Steven
+ * @Date: 2020-11-06 12:11:16
+ * @LastEditors: Steven
+ * @LastEditTime: 2020-11-06 14:21:25
+-->
 <template>
 	<view class="content">
         <image class="logo" src="../../static/logo.png"></image>
@@ -33,9 +40,9 @@
 	}
 
 	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin: 200rpx auto 50rpx auto;
+		height: 2rem;
+		width: 2rem;
+		margin: 2rem auto 1rem auto;
 	}
 
 	.text-area {
@@ -44,7 +51,7 @@
 	}
 
 	.title {
-		font-size: 36rpx;
+		font-size: 0.5rem;
 		color: #8f8f94;
 	}
 </style>
