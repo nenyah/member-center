@@ -8,17 +8,19 @@
       }
     },
     {
-      "path": "pages/privacy/privacy",
-      "style": {
-        "navigationBarTitleText": "隐私政策"
-      }
-    },
-    {
       "path": "pages/poll/poll",
       "style": {
         "navigationBarTitleText": "问卷调查"
       }
+    },
+
+    {
+      "path": "pages/privacy/privacy",
+      "style": {
+        "navigationBarTitleText": "隐私政策"
+      }
     }
+
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

@@ -31,8 +31,8 @@
                 class="fixed top-0 left-0 right-0 bottom-0 modal-backdrop flex flex-col justify-center items-center z-30"
             >
                 <form @submit="formSubmit">
-                    <view style="background-color: #ad3d3b; width: 80vw;height: 80vh;"
-                          class="mx-2 my-2 flex flex-col items-center text-gray-100">
+                    <view style="width: 80vw;height: 80vh;"
+                          class="mx-2 my-2 flex flex-col items-center text-gray-100 bg-img">
                         <view class="fa fa-window-close fa-inverse self-end" @click="hide"></view>
                         <view class="mt-16">付邮试用领取信息</view>
                         <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
@@ -143,7 +143,7 @@ import {Component, Vue} from "vue-property-decorator"
 
 @Component
 export default class Index extends Vue {
-    private img = "/static/index-cover.jpg"
+    private img = "https://tp.huadongbio.com:9000/weixinapp-shanjian/index-cover.jpg"
     private showModal = false
     private showRule = false
     private checked = false
@@ -199,5 +199,9 @@ export default class Index extends Vue {
 
 .modal-backdrop {
     background-color: rgba(0, 0, 0, 0.4);
+}
+.bg-img{
+    background-image: url('https://tp.huadongbio.com:9000/weixinapp-shanjian/address_modal_bg.png');
+    background-size: 100%;
 }
 </style>
