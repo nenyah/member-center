@@ -20,11 +20,19 @@
                 <view v-if="index<7" class="flex">
                     <view class="flex-none">{{ item.label }}</view>
                     <view v-if="item.key!=='gender'" class="flex">
-                        <input type="text"
+                        <input type="number"
                                :placeholder="item.value"
                                :name="item.key"
                                :value="item.value"
                                @blur="valid(item.key,$event)"
+                               v-if="item.key!=='username'"
+                        >
+                        <input type="number"
+                               :placeholder="item.value"
+                               :name="item.key"
+                               :value="item.value"
+                               @blur="valid(item.key,$event)"
+                               v-else
                         >
                         <view v-if="item.key.endsWith('eight')">kg</view>
                         <view v-else-if="item.key==='stature' || item.key==='waistline'">cm</view>
