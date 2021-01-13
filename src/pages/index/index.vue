@@ -32,10 +32,11 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator"
+import {Component, Vue} from 'vue-property-decorator'
 
-import AddressInfo from "./components/address-info.vue"
-import RuleInfo from "./components/rule-info.vue"
+import AddressInfo from './components/address-info.vue'
+import RuleInfo from './components/rule-info.vue'
+import {appConfig} from '@/common/config'
 
 @Component({
     components: {
@@ -44,7 +45,7 @@ import RuleInfo from "./components/rule-info.vue"
     }
 })
 export default class Index extends Vue {
-    private img = "https://tp.huadongbio.com:9000/weixinapp-shanjian/index-cover.jpg"
+    private img = appConfig.indexImg
     private showModal = false
     private showRule = false
 
@@ -64,8 +65,8 @@ export default class Index extends Vue {
 
 
     private hide(val: string) {
-        console.log("parent get:::", val)
-        if (val === "rule") {
+        console.log('parent get:::', val)
+        if (val === 'rule') {
             this.showRule = false
         } else {
             this.showModal = false
