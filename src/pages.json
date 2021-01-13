@@ -18,6 +18,12 @@
       "style": {
         "navigationBarTitleText": "问卷调查"
       }
+    },
+    {
+      "path": "pages/payment/payment",
+      "style": {
+        "navigationBarTitleText": "订单确认"
+      }
     }
   ],
   "globalStyle": {

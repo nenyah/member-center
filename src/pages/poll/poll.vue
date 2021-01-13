@@ -94,195 +94,195 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator"
+import {Component, Vue} from 'vue-property-decorator'
 
 @Component
 export default class Poll extends Vue {
     private question = {
-        formDeclare: "本次问卷不涉及您的个人隐私，仅作为您使用产品前后的数据对比参照，请您如实填写。",
+        formDeclare: '本次问卷不涉及您的个人隐私，仅作为您使用产品前后的数据对比参照，请您如实填写。',
         formData: [
             {
-                "key": "username",
-                "type": "input",
-                "label": "姓名：",
-                "value": ""
+                'key': 'username',
+                'type': 'input',
+                'label': '姓名：',
+                'value': ''
             },
             {
-                "key": "gender",
-                "type": "radio",
-                "label": "性别：",
-                "value": [
+                'key': 'gender',
+                'type': 'radio',
+                'label': '性别：',
+                'value': [
                     {
-                        "label": "男",
-                        "value": "1"
+                        'label': '男',
+                        'value': '1'
                     },
                     {
-                        "label": "女",
-                        "value": "2"
+                        'label': '女',
+                        'value': '2'
                     }]
             },
             {
-                "key": "age",
-                "type": "input",
-                "label": "年龄：",
-                "value": ""
+                'key': 'age',
+                'type': 'input',
+                'label': '年龄：',
+                'value': ''
             },
             {
-                "key": "stature",
-                "type": "input",
-                "label": "身高：",
-                "value": ""
+                'key': 'stature',
+                'type': 'input',
+                'label': '身高：',
+                'value': ''
             },
             {
-                "key": "weight",
-                "type": "input",
-                "label": "体重：",
-                "value": ""
+                'key': 'weight',
+                'type': 'input',
+                'label': '体重：',
+                'value': ''
             },
             {
-                "key": "waistline",
-                "type": "input",
-                "label": "腰围：",
-                "value": ""
+                'key': 'waistline',
+                'type': 'input',
+                'label': '腰围：',
+                'value': ''
             },
             {
-                "key": "targetWeight",
-                "type": "input",
-                "label": "目标体重：",
-                "value": ""
+                'key': 'targetWeight',
+                'type': 'input',
+                'label': '目标体重：',
+                'value': ''
             },
             {
-                "key": "homeFat",
-                "type": "radio",
-                "label": "您家人当中有肥胖吗？",
-                "value": [
+                'key': 'homeFat',
+                'type': 'radio',
+                'label': '您家人当中有肥胖吗？',
+                'value': [
                     {
-                        "label": "全家都胖",
-                        "value": "1"
+                        'label': '全家都胖',
+                        'value': '1'
                     },
                     {
-                        "label": "有一两个胖",
-                        "value": "2"
+                        'label': '有一两个胖',
+                        'value': '2'
                     },
                     {
-                        "label": "没有",
-                        "value": "3"
+                        'label': '没有',
+                        'value': '3'
                     }
                 ]
             },
             {
-                "key": "fatTime",
-                "type": "radio",
-                "label": "您是从小到大都胖，还是近几年才胖？",
-                "value": [
+                'key': 'fatTime',
+                'type': 'radio',
+                'label': '您是从小到大都胖，还是近几年才胖？',
+                'value': [
                     {
-                        "label": "从小就胖",
-                        "value": "1"
+                        'label': '从小就胖',
+                        'value': '1'
                     },
                     {
-                        "label": "长大后发胖",
-                        "value": "2"
+                        'label': '长大后发胖',
+                        'value': '2'
                     },
                     {
-                        "label": "近一两年才胖",
-                        "value": "3"
+                        'label': '近一两年才胖',
+                        'value': '3'
                     },
                     {
-                        "label": "产后肥胖",
-                        "value": "4"
+                        'label': '产后肥胖',
+                        'value': '4'
                     }
                 ]
             },
             {
-                "key": "losingWeightWays",
-                "type": "checkbox",
-                "label": "请问您曾经使用过以下哪些减肥方法？【多选题】",
-                "value": [
+                'key': 'losingWeightWays',
+                'type': 'checkbox',
+                'label': '请问您曾经使用过以下哪些减肥方法？【多选题】',
+                'value': [
                     {
-                        "label": "节食",
-                        "value": "1"
+                        'label': '节食',
+                        'value': '1'
                     },
                     {
-                        "label": "减肥茶等腹泻法",
-                        "value": "2"
+                        'label': '减肥茶等腹泻法',
+                        'value': '2'
                     },
                     {
-                        "label": "蛋白质减肥法",
-                        "value": "3"
+                        'label': '蛋白质减肥法',
+                        'value': '3'
                     },
                     {
-                        "label": "按摩埋线",
-                        "value": "4"
+                        'label': '按摩埋线',
+                        'value': '4'
                     },
                     {
-                        "label": "口服或打针等药物疗法",
-                        "value": "5"
+                        'label': '口服或打针等药物疗法',
+                        'value': '5'
                     },
                     {
-                        "label": "仪器物理法",
-                        "value": "6"
+                        'label': '仪器物理法',
+                        'value': '6'
                     },
                     {
-                        "label": "运动法",
-                        "value": "7"
+                        'label': '运动法',
+                        'value': '7'
                     },
                     {
-                        "label": "吸脂等手术疗法",
-                        "value": "8"
+                        'label': '吸脂等手术疗法',
+                        'value': '8'
                     },
                     {
-                        "label": "无",
-                        "value": "9"
+                        'label': '无',
+                        'value': '9'
                     }
                 ]
             },
             {
-                "key": "loseWeightInHalfYear",
-                "type": "radio",
-                "label": "最近半年有减过肥吗？",
-                "value": [
+                'key': 'loseWeightInHalfYear',
+                'type': 'radio',
+                'label': '最近半年有减过肥吗？',
+                'value': [
                     {
-                        "label": "有，在不停的减肥",
-                        "value": "1"
+                        'label': '有，在不停的减肥',
+                        'value': '1'
                     },
                     {
-                        "label": "有一次",
-                        "value": "2"
+                        'label': '有一次',
+                        'value': '2'
                     },
                     {
-                        "label": "没有",
-                        "value": "3"
+                        'label': '没有',
+                        'value': '3'
                     }
                 ]
             },
             {
-                "key": "eatRegularly",
-                "type": "checkbox",
-                "label": "平时三餐有按时吃吗？【多选题】",
-                "value": [
+                'key': 'eatRegularly',
+                'type': 'checkbox',
+                'label': '平时三餐有按时吃吗？【多选题】',
+                'value': [
                     {
-                        "label": "经常不按时",
-                        "value": "1"
+                        'label': '经常不按时',
+                        'value': '1'
                     },
                     {
-                        "label": "偶尔不按时",
-                        "value": "2"
+                        'label': '偶尔不按时',
+                        'value': '2'
                     },
                     {
-                        "label": "都按时吃",
-                        "value": "2"
+                        'label': '都按时吃',
+                        'value': '2'
                     },
                     {
-                        "label": "经常不吃早餐",
-                        "value": "3"
+                        'label': '经常不吃早餐',
+                        'value': '3'
                     },
                     {
-                        "label": "经常不吃午餐",
-                        "value": "4"
+                        'label': '经常不吃午餐',
+                        'value': '4'
                     },
                     {
-                        "label": "经常不吃晚餐",
-                        "value": "5"
+                        'label': '经常不吃晚餐',
+                        'value': '5'
                     }
                 ]
             }
@@ -291,25 +291,29 @@ export default class Poll extends Vue {
     private errors: string[] = []
 
     private radioChange(e: any) {
-        console.log("e:::", e)
+        console.log('e:::', e)
         let formdata = this.question.formData,
             values = e.detail.value
         for (let i = 0, lenI = formdata.length; i < lenI; ++i) {
             const item = formdata[i]
             if (values.includes(item.value)) {
-                this.$set(item, "checked", true)
+                this.$set(item, 'checked', true)
             } else {
-                this.$set(item, "checked", false)
+                this.$set(item, 'checked', false)
             }
         }
     }
 
     private formSubmit(e: any) {
-        console.log("form发生了submit事件，携带数据为：" + JSON.stringify(e.detail.value))
+        console.log('form发生了submit事件，携带数据为：' + JSON.stringify(e.detail.value))
         const formdata = e.detail.value
         uni.showModal({
-            content: "表单数据内容：" + JSON.stringify(formdata),
-            showCancel: false
+            content: '表单数据内容：' + JSON.stringify(formdata),
+            showCancel: false,
+            success: res => {
+                console.log(`res:::`, res)
+                uni.navigateTo({url: `/pages/payment/payment`})
+            }
         })
     }
 
@@ -319,9 +323,9 @@ export default class Poll extends Vue {
         for (let i = 0, lenI = formdata.length; i < lenI; ++i) {
             const item = formdata[i]
             if (values.includes(item.value)) {
-                this.$set(item, "checked", true)
+                this.$set(item, 'checked', true)
             } else {
-                this.$set(item, "checked", false)
+                this.$set(item, 'checked', false)
             }
         }
     }
@@ -330,43 +334,43 @@ export default class Poll extends Vue {
         this.errors = []
         const value = event.detail.value
         switch (type) {
-            case "username":
+            case 'username':
                 const name = value
                 if (!name.length) {
-                    this.errors.push("姓名不能为空！")
+                    this.errors.push('姓名不能为空！')
                 }
                 break
-            case "age":
+            case 'age':
                 const age = value
-                this.validRule(age, "age")
+                this.validRule(age, 'age')
                 break
-            case "stature":
+            case 'stature':
                 const height = value
-                this.validRule(height, "stature", 230, 120)
+                this.validRule(height, 'stature', 230, 120)
                 break
-            case "weight":
+            case 'weight':
                 const weight = value
-                this.validRule(weight, "weight", 200, 30)
+                this.validRule(weight, 'weight', 200, 30)
                 break
-            case "waistline":
+            case 'waistline':
                 const waistline = value
-                this.validRule(waistline, "waistline", 100, 50)
+                this.validRule(waistline, 'waistline', 100, 50)
                 break
-            case "targetWeight":
+            case 'targetWeight':
                 const targetWeight = value
-                this.validRule(targetWeight, "targetWeight", 100, 30)
+                this.validRule(targetWeight, 'targetWeight', 100, 30)
                 break
         }
     }
 
     private validRule(value: string, elem: string, maxValue = 150, minValue = 15) {
         const obj: { [key: string]: string; } = {
-            username: "姓名",
-            age: "年龄",
-            stature: "身高",
-            weight: "体重",
-            waistline: "腰围",
-            targetWeight: "目标体重"
+            username: '姓名',
+            age: '年龄',
+            stature: '身高',
+            weight: '体重',
+            waistline: '腰围',
+            targetWeight: '目标体重'
         }
         if (!value.length) {
             this.errors.push(`${obj[elem]}不能为空！`)

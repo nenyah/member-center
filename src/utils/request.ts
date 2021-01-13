@@ -14,7 +14,7 @@ interface Config {
     [x: string]: string
 }
 
-const send = (params: IParams): Promise<any> => {
+function send(params: IParams): Promise<any> {
     // 加载中
     uni.showLoading({
         title: "加载中",
@@ -53,6 +53,7 @@ const send = (params: IParams): Promise<any> => {
         })
     })
 }
+
 export const request = {
     post: (url: string, data: any) => {
         return send({url, data, method: "POST"})
