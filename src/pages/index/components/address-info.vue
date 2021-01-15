@@ -44,12 +44,12 @@
                 </view>
                 <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
                     <image src="/static/location.png" style="width: 1rem;height: 1rem;"></image>
-                    <input type="text" class="w-32 ml-1 text-gray-900" name="address" placeholder="地址"
+                    <input type="text" class="ml-1 text-gray-900" name="address" placeholder="地址"
                            placeholder-class="text-gray-600">
                 </view>
                 <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
                     <image src="/static/phone.png" style="width: 1rem;height: 1rem;"></image>
-                    <input type="number" class="w-32 ml-1 text-gray-900" name="phone" placeholder="电话"
+                    <input type="number" class="ml-1 text-gray-900" name="phone" placeholder="电话"
                            placeholder-class="text-gray-600">
                 </view>
                 <view
@@ -81,8 +81,8 @@
 </template>
 
 <script lang="ts">
-import {Component, Emit, Vue} from "vue-property-decorator"
-import poi from "@/common/address"
+import {Component, Emit, Vue} from 'vue-property-decorator'
+import poi from '@/common/address'
 
 @Component
 export default class AddressInfo extends Vue {
@@ -99,14 +99,14 @@ export default class AddressInfo extends Vue {
         return res?.children.map((el: any) => el.name)
     }
 
-    @Emit("hideRule")
+    @Emit('hideRule')
     private hide() {
-        return "modal"
+        return 'modal'
     }
 
     private showPrivatePolicy() {
         uni.navigateTo({
-            url: "/pages/privacy/privacy"
+            url: '/pages/privacy/privacy'
         })
     }
 
@@ -114,27 +114,36 @@ export default class AddressInfo extends Vue {
         this.checked = !this.checked
     }
 
+    private isValidate(values: { [`string`]: string }) {
+
+    }
+
     private formSubmit(e: any) {
-        console.log("e:::", e)
+        console.log('e:::', e)
         /** todo
          * 1. 验证输入内容是否合法
          * 2. 验证是否同意 checked=true
          */
-
+        const value = e.detail.value
+        console.log('value:::', value)
+        if (!value.name) {
+            console.log('名字不能为空')
+            return
+        }
         // 2. 验证是否同意 checked=true
         if (!this.checked) {
             uni.showModal({
-                title: "请确认是否同意隐私政策",
+                title: '请确认是否同意隐私政策',
                 showCancel: false
             })
             return
         }
-        uni.navigateTo({url: "/pages/poll/poll"})
+        uni.navigateTo({url: '/pages/poll/poll'})
     }
 
     private pickerChange(type: string, event: any) {
-        console.log("picker发送选择改变，携带值为", event.target.value)
-        if (type === "province") {
+        console.log('picker发送选择改变，携带值为', event.target.value)
+        if (type === 'province') {
             this.provinceIndex = event.target.value
         } else {
             this.cityIndex = event.target.value

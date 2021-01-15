@@ -2,11 +2,14 @@
     <view
         class="fixed top-0 left-0 right-0 bottom-0 modal-backdrop flex flex-col justify-center items-center z-30"
     >
-        <view style="width: 80vw;height: 80vh;"
-              class="mx-2 my-2 flex flex-col items-center text-gray-900 bg-white">
+        <view
+            style="width: 80vw;height: 85vh;"
+            class="mx-2 my-2 flex flex-col items-center text-gray-900 bg-white"
+            enable-flex
+        >
             <view class="fa fa-window-close self-end text-theme" @click="hide"></view>
             <view class="text-theme text-2xl">活动规则</view>
-            <view class="px-2 text-sm">
+            <view class="p-2 text-xs">
                 <view class="my-1">
                     <view class="fa fa-dot-circle-o text-theme mr-1"></view>
                     用户关注膳见纤玺微信公众号，可通过活动页面申请 10 元付邮试用，领取高纤多维复
@@ -48,13 +51,13 @@
 </template>
 
 <script lang="ts">
-import {Component, Emit, Vue} from "vue-property-decorator"
+import {Component, Emit, Vue} from 'vue-property-decorator'
 
 @Component
 export default class RuleInfo extends Vue {
-    @Emit("hide")
+    @Emit('hide')
     private hide() {
-        return "rule"
+        return 'rule'
     }
 }
 </script>

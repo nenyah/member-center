@@ -88,7 +88,7 @@ export default class Index extends Vue {
 }
 
 .bg-img {
-    background-image: url('https://tp.huadongbio.com:9000/weixinapp-shanjian/address_modal_bg.png');
+    background-image: url('http://192.168.0.175:8500/shanjian-app/address_modal_bg.png');
     background-size: 100%;
 }
 </style>
