@@ -1,6 +1,7 @@
 <template>
     <view
         class="fixed top-0 left-0 right-0 bottom-0 modal-backdrop flex flex-col justify-center items-center z-30"
+        v-if="showRule"
     >
         <view
             style="width: 80vw;height: 85vh;"
@@ -51,10 +52,13 @@
 </template>
 
 <script lang="ts">
-import {Component, Emit, Vue} from 'vue-property-decorator'
+import {Component, Emit, Prop, Vue} from 'vue-property-decorator'
 
 @Component
 export default class RuleInfo extends Vue {
+    @Prop({type: Boolean, default: false})
+    readonly showRule!: boolean
+
     @Emit('hide')
     private hide() {
         return 'rule'
