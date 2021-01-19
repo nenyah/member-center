@@ -18,6 +18,9 @@
                 活动规则
             </view>
         </view>
+        <view class="mb-10 w-full" v-if="!showModal">
+            <official-account></official-account>
+        </view>
         <!--        询问按钮-->
         <view
             class="fixed left-0 bottom-0 w-full py-2 box-border text-white text-center"
@@ -26,8 +29,8 @@
         >
             立即免费申请
         </view>
-        <address-info v-if="showModal" @hide="hide"></address-info>
-        <rule-info v-if="showRule" @hide="hide"></rule-info>
+        <address-info :showModal="showModal" @hide="hide"></address-info>
+        <rule-info :showRule="showRule" @hide="hide"></rule-info>
     </view>
 </template>
 
@@ -37,6 +40,7 @@ import {Component, Vue} from 'vue-property-decorator'
 import AddressInfo from './components/address-info.vue'
 import RuleInfo from './components/rule-info.vue'
 import {appConfig} from '@/common/config'
+import {UserStoreModule} from '@/store/modules/user'
 
 @Component({
     components: {
@@ -49,23 +53,48 @@ export default class Index extends Vue {
     private showModal = false
     private showRule = false
 
-
+    /**
+     * 显示规则
+     * @private
+     */
     private toggleRule() {
         this.showRule = true
     }
 
-    private applyGift() {
-        /** todo
+    /**
+     * 申请礼品
+     * @private
+     */
+    private applyGift(): void {
+        /**
          * 1. 验证登录
          * 2. 验证是否关注公众号
-         * 3. 弹窗填写信息
+         * 3. 是否已经申请过
+         * 4. 弹窗填写信息
          */
+        UserStoreModule.getUserinfo()
+        if (!this.isLogin()) {
+            console.log(`没有登录`)
+            return
+        }
+        if (!this.isFollower()) {
+            uni.showModal({content: `请先关注公众号`})
+            return
+        }
+        if (this.wasBuy()) {
+            uni.showModal({content: `已经申请过了`})
+            return
+        }
         this.showModal = true
     }
 
-
+    /**
+     * 隐藏弹窗
+     * @return {void}
+     * @private
+     * @param val string
+     */
     private hide(val: string) {
-        console.log('parent get:::', val)
         if (val === 'rule') {
             this.showRule = false
         } else {
@@ -73,7 +102,32 @@ export default class Index extends Vue {
         }
     }
 
+    /**
+     * 是否登录
+     * @return {boolean}
+     * @private
+     */
+    private isLogin() {
+        return !!UserStoreModule.loginInfo.openId
+    }
 
+    /**
+     * 是否关注公众号
+     * @return {boolean}
+     * @private
+     */
+    private isFollower() {
+        return !!UserStoreModule.loginInfo.unionId
+    }
+
+    /**
+     * 是否已经申请过
+     * @return {boolean}
+     * @private
+     */
+    private wasBuy() {
+        return UserStoreModule.loginInfo.wasBuy
+    }
 }
 </script>
 
@@ -87,8 +141,4 @@ export default class Index extends Vue {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.bg-img {
-    background-image: url('http://192.168.0.175:8500/shanjian-app/address_modal_bg.png');
-    background-size: 100%;
-}
 </style>
