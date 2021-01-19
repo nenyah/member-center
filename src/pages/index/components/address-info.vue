@@ -1,6 +1,7 @@
 <template>
     <view
         class="fixed top-0 left-0 right-0 bottom-0 modal-backdrop flex flex-col justify-center items-center z-30"
+        v-if="showModal"
     >
         <form @submit="formSubmit">
             <view style="width: 80vw;height: 80vh;"
@@ -10,8 +11,11 @@
                 <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
                     <image src="/static/people.png" style="width: 1rem;height: 1rem;"></image>
                     <input type="text" class="w-32 ml-1 text-gray-900" name="name" placeholder="姓名"
-                           placeholder-class="text-gray-600">
+                           placeholder-class="text-gray-600"
+                           @change="clearErr"
+                    >
                 </view>
+                <view v-if="!!error.nameErrMsg" class="text-yellow-300">{{ error.nameErrMsg }}</view>
                 <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
                     <image src="/static/province.png" style="width: 1rem;height: 1rem;"></image>
                     <picker
@@ -27,6 +31,7 @@
                         </view>
                     </picker>
                 </view>
+                <view v-if="!!error.provinceErrMsg" class="text-yellow-300">{{ error.provinceErrMsg }}</view>
                 <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
                     <image src="/static/city.png" style="width: 1rem;height: 1rem;"></image>
                     <picker
@@ -42,18 +47,25 @@
                         </view>
                     </picker>
                 </view>
+                <view v-if="!!error.cityErrMsg" class="text-yellow-300">{{ error.cityErrMsg }}</view>
                 <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
                     <image src="/static/location.png" style="width: 1rem;height: 1rem;"></image>
                     <input type="text" class="ml-1 text-gray-900" name="address" placeholder="地址"
-                           placeholder-class="text-gray-600">
+                           placeholder-class="text-gray-600"
+                           @change="clearErr"
+                    >
                 </view>
+                <view v-if="!!error.addressErrMsg" class="text-yellow-300">{{ error.addressErrMsg }}</view>
                 <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
                     <image src="/static/phone.png" style="width: 1rem;height: 1rem;"></image>
                     <input type="number" class="ml-1 text-gray-900" name="phone" placeholder="电话"
-                           placeholder-class="text-gray-600">
+                           placeholder-class="text-gray-600"
+                           @change="clearErr"
+                    >
                 </view>
+                <view v-if="!!error.phoneErrMsg" class="text-yellow-300">{{ error.phoneErrMsg }}</view>
                 <view
-                    class="text-xs px-10 my-2"
+                    class="text-xs my-2 w-56"
                     @click="toggleMark"
                 >
                     <view v-if="checked" class="fa fa-check-square-o mr-1"></view>
@@ -81,14 +93,41 @@
 </template>
 
 <script lang="ts">
-import {Component, Emit, Vue} from 'vue-property-decorator'
+import {Component, Emit, Prop, Vue} from 'vue-property-decorator'
 import poi from '@/common/address'
+import api from '@/api'
 
+type Error = {
+    [index: string]: string
+}
+type Value = {
+    name: string
+    phone: string
+    province: string
+    city: string
+    address: string
+}
 @Component
 export default class AddressInfo extends Vue {
     private checked = false
     private provinceIndex = -1
     private cityIndex = -1
+    private form = {
+        name: '',
+        province: '',
+        city: '',
+        address: '',
+        phone: '',
+    }
+    private error: Error = {
+        nameErrMsg: '',
+        provinceErrMsg: '',
+        cityErrMsg: '',
+        addressErrMsg: '',
+        phoneErrMsg: '',
+    }
+    @Prop({type: Boolean, default: false})
+    readonly showModal!: boolean
 
     get province() {
         return poi.map(el => el.name)
@@ -96,12 +135,22 @@ export default class AddressInfo extends Vue {
 
     get city() {
         const res = poi.find(el => el.name === this.province[this.provinceIndex]) as any
-        return res?.children.map((el: any) => el.name)
+        return res?.children.map((el: any) => el.name) || ['请先选择省份']
     }
 
-    @Emit('hideRule')
+    @Emit('hide')
     private hide() {
         return 'modal'
+    }
+
+    private clearErr() {
+        this.error = {
+            nameErrMsg: '',
+            provinceErrMsg: '',
+            cityErrMsg: '',
+            addressErrMsg: '',
+            phoneErrMsg: '',
+        }
     }
 
     private showPrivatePolicy() {
@@ -114,20 +163,25 @@ export default class AddressInfo extends Vue {
         this.checked = !this.checked
     }
 
-    private isValidate(values: { [`string`]: string }) {
-
+    private isValidate(values: { [x: string]: any }) {
+        for (let formKey in this.form) {
+            if (!values[formKey]) {
+                this.error[`${formKey}ErrMsg`] = `此项是必填项`
+                return false
+            }
+        }
+        return true
     }
 
-    private formSubmit(e: any) {
-        console.log('e:::', e)
-        /** todo
+    private async formSubmit(e: any) {
+        /**
          * 1. 验证输入内容是否合法
          * 2. 验证是否同意 checked=true
+         * 3. 上传表单信息，成功后跳转页面
          */
-        const value = e.detail.value
-        console.log('value:::', value)
-        if (!value.name) {
-            console.log('名字不能为空')
+        const value: Value = e.detail.value
+        // 1. 验证输入内容是否合法
+        if (!this.isValidate(value)) {
             return
         }
         // 2. 验证是否同意 checked=true
@@ -136,6 +190,18 @@ export default class AddressInfo extends Vue {
                 title: '请确认是否同意隐私政策',
                 showCancel: false
             })
+            return
+        }
+        try {
+            await api.reciver.updateReceiver({
+                username: value.name,
+                mobile: value.phone,
+                province: value.province,
+                city: value.city,
+                detailPlace: value.address
+            })
+        } catch (err) {
+            uni.showModal({content: `提交失败请重试` + JSON.stringify(err), showCancel: false})
             return
         }
         uni.navigateTo({url: '/pages/poll/poll'})
@@ -148,11 +214,15 @@ export default class AddressInfo extends Vue {
         } else {
             this.cityIndex = event.target.value
         }
+        this.clearErr()
     }
 
 }
 </script>
 
-<style scoped>
-
+<style scoped lang="scss">
+.bg-img {
+    background-image: url('http://192.168.0.175:8500/shanjian-app/address_modal_bg.png');
+    background-size: 100%;
+}
 </style>
