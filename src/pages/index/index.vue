@@ -65,7 +65,7 @@ export default class Index extends Vue {
      * 申请礼品
      * @private
      */
-    private applyGift(): void {
+    private applyGift() {
         /**
          * 1. 验证登录
          * 2. 验证是否关注公众号
