@@ -1,15 +1,15 @@
-import {token} from "./token"
-import {appConfig} from "@/common/config"
+import {token} from './token'
+import {appConfig} from '@/common/config'
 
 interface IParams {
     url: string
-    method?: "GET" | "POST" | "PUT"
+    method?: 'GET' | 'POST' | 'PUT'
     base_url?: boolean
     data?: any
 }
 
 interface Config {
-    "Content-Type": string
+    'Content-Type': string
 
     [x: string]: string
 }
@@ -17,7 +17,7 @@ interface Config {
 function send(params: IParams): Promise<any> {
     // 加载中
     uni.showLoading({
-        title: "加载中",
+        title: '加载中',
     })
     return new Promise((resolve, reject) => {
 
@@ -34,14 +34,18 @@ function send(params: IParams): Promise<any> {
             header: (() => {
                 const tokenValue = token.get()
                 let config: Config = {
-                    "Content-Type": "application/json",
+                    'Content-Type': 'application/json',
                 }
                 if (tokenValue) {
-                    config[appConfig.tokenKey] = tokenValue
+                    config[appConfig.tokenKey] = 'Bearer ' + tokenValue
                 }
                 return config
             })(),
             success(res) {
+                console.log('返回数据:::', res)
+                if (res.statusCode !== 200) {
+                    reject(res.data)
+                }
                 resolve(res.data)
             },
             fail(err) {
@@ -54,11 +58,11 @@ function send(params: IParams): Promise<any> {
     })
 }
 
-export const request = {
+export default {
     post: (url: string, data: any) => {
-        return send({url, data, method: "POST"})
+        return send({url, data, method: 'POST'})
     },
     get: (url: string, data: any) => {
-        return send({url, data, method: "GET"})
+        return send({url, data, method: 'GET'})
     }
 }
