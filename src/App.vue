@@ -24,9 +24,6 @@ export default Vue.extend({
 
 <style lang="scss">
 /*每个页面公共css */
-//@tailwind base;
-//@tailwind components;
-//@tailwind utilities;
 @import "uview-ui/index.scss";
 $theme-color: #be3136;
 .bg-theme {
