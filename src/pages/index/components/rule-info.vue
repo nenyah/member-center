@@ -4,9 +4,8 @@
         v-if="showRule"
     >
         <view
-            style="width: 80vw;height: 85vh;"
+            style="width: 80vw;"
             class="mx-2 my-2 flex flex-col items-center text-gray-900 bg-white"
-            enable-flex
         >
             <view class="fa fa-window-close self-end text-theme" @click="hide"></view>
             <view class="text-theme text-2xl">活动规则</view>

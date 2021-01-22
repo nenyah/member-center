@@ -4,88 +4,90 @@
         v-if="showModal"
     >
         <form @submit="formSubmit">
-            <view style="width: 80vw;height: 80vh;"
+            <view style="width: 80vw;"
                   class="mx-2 my-2 flex flex-col items-center text-gray-100 bg-img">
                 <view class="fa fa-window-close fa-inverse self-end" @click="hide"></view>
-                <view class="mt-16">付邮试用领取信息</view>
-                <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
-                    <image src="/static/people.png" style="width: 1rem;height: 1rem;"></image>
-                    <input type="text" class="w-32 ml-1 text-gray-900" name="name" placeholder="姓名"
-                           placeholder-class="text-gray-600"
-                           @change="clearErr"
+                <view class="py-2">
+                    <view class="mt-16 text-center">付邮试用领取信息</view>
+                    <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
+                        <image src="/static/people.png" style="width: 1rem;height: 1rem;"></image>
+                        <input type="text" class="w-32 ml-1 text-gray-900" name="name" placeholder="姓名"
+                               placeholder-class="text-gray-600"
+                               @change="clearErr"
+                        >
+                    </view>
+                    <view v-if="!!error.nameErrMsg" class="text-yellow-300">{{ error.nameErrMsg }}</view>
+                    <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
+                        <image src="/static/province.png" style="width: 1rem;height: 1rem;"></image>
+                        <picker
+                            @change="pickerChange('province',$event)"
+                            :value="province[provinceIndex]"
+                            :range="province"
+                            name="province"
+                            class="flex-1">
+                            <view class="flex items-center justify-between">
+                                <label v-if="provinceIndex===-1" class="text-gray-600 ml-1">省份</label>
+                                <view class="text-gray-900 ml-1">{{ province[provinceIndex] }}</view>
+                                <view class="fa fa-caret-down text-theme fa-lg"></view>
+                            </view>
+                        </picker>
+                    </view>
+                    <view v-if="!!error.provinceErrMsg" class="text-yellow-300">{{ error.provinceErrMsg }}</view>
+                    <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
+                        <image src="/static/city.png" style="width: 1rem;height: 1rem;"></image>
+                        <picker
+                            @change="pickerChange('city',$event)"
+                            :value="city[cityIndex]"
+                            :range="city"
+                            name="city"
+                            class="flex-1">
+                            <view class="flex items-center justify-between">
+                                <label v-if="cityIndex===-1" class="text-gray-600 ml-1">城市</label>
+                                <view class="text-gray-900 ml-1">{{ city[cityIndex] }}</view>
+                                <view class="fa fa-caret-down text-theme fa-lg"></view>
+                            </view>
+                        </picker>
+                    </view>
+                    <view v-if="!!error.cityErrMsg" class="text-yellow-300">{{ error.cityErrMsg }}</view>
+                    <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
+                        <image src="/static/location.png" style="width: 1rem;height: 1rem;"></image>
+                        <input type="text" class="ml-1 text-gray-900" name="address" placeholder="地址"
+                               placeholder-class="text-gray-600"
+                               @change="clearErr"
+                        >
+                    </view>
+                    <view v-if="!!error.addressErrMsg" class="text-yellow-300">{{ error.addressErrMsg }}</view>
+                    <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
+                        <image src="/static/phone.png" style="width: 1rem;height: 1rem;"></image>
+                        <input type="number" class="ml-1 text-gray-900" name="phone" placeholder="电话"
+                               placeholder-class="text-gray-600"
+                               @change="clearErr"
+                        >
+                    </view>
+                    <view v-if="!!error.phoneErrMsg" class="text-yellow-300">{{ error.phoneErrMsg }}</view>
+                    <view
+                        class="text-xs my-2 w-56"
+                        @click="toggleMark"
                     >
-                </view>
-                <view v-if="!!error.nameErrMsg" class="text-yellow-300">{{ error.nameErrMsg }}</view>
-                <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
-                    <image src="/static/province.png" style="width: 1rem;height: 1rem;"></image>
-                    <picker
-                        @change="pickerChange('province',$event)"
-                        :value="province[provinceIndex]"
-                        :range="province"
-                        name="province"
-                        class="flex-1">
-                        <view class="flex items-center justify-between">
-                            <label v-if="provinceIndex===-1" class="text-gray-600 ml-1">省份</label>
-                            <view class="text-gray-900 ml-1">{{ province[provinceIndex] }}</view>
-                            <view class="fa fa-caret-down text-theme fa-lg"></view>
-                        </view>
-                    </picker>
-                </view>
-                <view v-if="!!error.provinceErrMsg" class="text-yellow-300">{{ error.provinceErrMsg }}</view>
-                <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
-                    <image src="/static/city.png" style="width: 1rem;height: 1rem;"></image>
-                    <picker
-                        @change="pickerChange('city',$event)"
-                        :value="city[cityIndex]"
-                        :range="city"
-                        name="city"
-                        class="flex-1">
-                        <view class="flex items-center justify-between">
-                            <label v-if="cityIndex===-1" class="text-gray-600 ml-1">城市</label>
-                            <view class="text-gray-900 ml-1">{{ city[cityIndex] }}</view>
-                            <view class="fa fa-caret-down text-theme fa-lg"></view>
-                        </view>
-                    </picker>
-                </view>
-                <view v-if="!!error.cityErrMsg" class="text-yellow-300">{{ error.cityErrMsg }}</view>
-                <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
-                    <image src="/static/location.png" style="width: 1rem;height: 1rem;"></image>
-                    <input type="text" class="ml-1 text-gray-900" name="address" placeholder="地址"
-                           placeholder-class="text-gray-600"
-                           @change="clearErr"
+                        <view v-if="checked" class="fa fa-check-square-o mr-1"></view>
+                        <view v-else class="fa fa-square-o mr-1"></view>
+                        我已阅读并了解膳见纤玺的
+                        <text
+                            @click.stop="showPrivatePolicy"
+                            class="underline"
+                        >
+                            【隐私政策】
+                        </text>
+                        ，并且同意接受其中所有的条款。
+                    </view>
+                    <button
+                        class="w-56 mx-auto text-gray-100 p-1 bg-white"
+                        style="color:#ad3d3b;"
+                        form-type="submit"
                     >
+                        确认提交
+                    </button>
                 </view>
-                <view v-if="!!error.addressErrMsg" class="text-yellow-300">{{ error.addressErrMsg }}</view>
-                <view class="bg-white flex items-center my-2 w-56 p-1 rounded box-border">
-                    <image src="/static/phone.png" style="width: 1rem;height: 1rem;"></image>
-                    <input type="number" class="ml-1 text-gray-900" name="phone" placeholder="电话"
-                           placeholder-class="text-gray-600"
-                           @change="clearErr"
-                    >
-                </view>
-                <view v-if="!!error.phoneErrMsg" class="text-yellow-300">{{ error.phoneErrMsg }}</view>
-                <view
-                    class="text-xs my-2 w-56"
-                    @click="toggleMark"
-                >
-                    <view v-if="checked" class="fa fa-check-square-o mr-1"></view>
-                    <view v-else class="fa fa-square-o mr-1"></view>
-                    我已阅读并了解膳见纤玺的
-                    <text
-                        @click.stop="showPrivatePolicy"
-                        class="underline"
-                    >
-                        【隐私政策】
-                    </text>
-                    ，并且同意接受其中所有的条款。
-                </view>
-                <button
-                    class="w-56 mx-auto text-gray-100 p-1 bg-white"
-                    style="color:#ad3d3b;"
-                    form-type="submit"
-                >
-                    确认提交
-                </button>
             </view>
 
         </form>
@@ -222,7 +224,8 @@ export default class AddressInfo extends Vue {
 
 <style scoped lang="scss">
 .bg-img {
-    background-image: url('http://192.168.0.175:8500/shanjian-app/address_modal_bg.png');
+    background-image: url('http://dev.huadongbio.com:8500/shanjian-app/address_modal_bg.png');
     background-size: 100%;
+    background-repeat: no-repeat;
 }
 </style>
