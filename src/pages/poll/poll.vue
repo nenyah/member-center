@@ -1,37 +1,36 @@
 <template>
-    <view class="bg-theme p-10 flex flex-col items-center">
-        <form @submit="formSubmit" class="bg-white px-10 shadow rounded p-10">
+    <view class="bg-theme p-10 flex flex-col items-center text-base">
+        <form @submit="formSubmit" class="bg-white shadow rounded p-10">
             <view class="text-center font-bold my-1">膳见纤玺减脂调研问卷</view>
             <view class="my-1 text-sm">{{ question.formDeclare }}</view>
-            <view v-if="errors.length" class="text-red-500 text-sm">
-                <view>输入不合法，请修改后提交：</view>
-                <view
-                    v-for="(error,index) in errors"
-                    :key="index"
-                >
-                    {{ error }}
-                </view>
-            </view>
+            <!--            <view v-if="errors.length" class="text-red-500 text-sm">-->
+            <!--                <view>输入不合法，请修改后提交：</view>-->
+            <!--                <view-->
+            <!--                    v-for="(error,index) in errors"-->
+            <!--                    :key="index"-->
+            <!--                >-->
+            <!--                    {{ error }}-->
+            <!--                </view>-->
+            <!--            </view>-->
             <view
                 v-for="(item,index) in question.formData"
                 :key="index"
-
             >
                 <view v-if="index<7" class="flex">
-                    <view class="flex-none">{{ item.label }}</view>
+                    <view class="flex-none">
+                        {{ item.label }}
+                    </view>
                     <view v-if="item.key!=='gender'" class="flex">
                         <input type="number"
                                :placeholder="item.value"
                                :name="item.key"
                                :value="item.value"
-                               @blur="valid(item.key,$event)"
                                v-if="item.key!=='username'"
                         >
-                        <input type="number"
+                        <input type="text"
                                :placeholder="item.value"
                                :name="item.key"
                                :value="item.value"
-                               @blur="valid(item.key,$event)"
                                v-else
                         >
                         <view v-if="item.key.endsWith('eight')">kg</view>
@@ -44,30 +43,36 @@
                                    class="flex mx-5"
                             >
                                 <view>
-                                    <radio :value="value.value" :checked="value.checked"/>
+                                    <radio :value="value.value" :checked="value.checked" color="red"
+                                           style="transform:scale(0.7)"/>
                                 </view>
-                                <view>{{ value.label }}</view>
+                                <view>
+                                    {{ value.label }}
+                                </view>
                             </label>
                         </radio-group>
                     </view>
                 </view>
                 <view v-else>
                     <view v-if="item.type==='radio'" class="my-5">
-                        {{ index + 1 }}. {{ item.label }}
+                        <view>
+                            {{ index - 6 }}. {{ item.label }}
+                        </view>
                         <radio-group @change="radioChange" :name="item.key">
                             <label v-for="(value,index) in item.value"
                                    :key="index"
                                    class="flex"
                             >
                                 <view>
-                                    <radio :value="value.value" :checked="value.checked"/>
+                                    <radio :value="value.value" :checked="value.checked" color="red"
+                                           style="transform:scale(0.7)"/>
                                 </view>
                                 <view>{{ value.label }}</view>
                             </label>
                         </radio-group>
                     </view>
                     <view v-else-if="item.type==='checkbox'" class="my-5">
-                        {{ index + 1 }}. {{ item.label }}
+                        <view>{{ index - 6 }}. {{ item.label }}</view>
                         <checkbox-group
                             @change="checkboxChange"
                             class="flex flex-col"
@@ -76,7 +81,8 @@
                             <label v-for="(value,index) in item.value"
                                    :key="index"
                             >
-                                <checkbox :value="value.value" :checked="value.checked"/>
+                                <checkbox :value="value.value" :checked="value.checked" color="red"
+                                          style="transform:scale(0.7)"/>
                                 {{ value.label }}
                             </label>
                         </checkbox-group>
@@ -95,6 +101,8 @@
 
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
+import api from '@/api'
+import {PrepayStoreModule} from '@/store/modules/payment'
 
 @Component
 export default class Poll extends Vue {
@@ -289,6 +297,15 @@ export default class Poll extends Vue {
         ]
     }
     private errors: string[] = []
+    private hasErr = false
+
+    async onLoad() {
+        const formData = await api.poll.info().catch((err: any) => {
+            uni.showModal({content: `获取表单数据失败` + JSON.stringify(err)})
+        })
+        console.log('formData:::', formData)
+        this.question = formData
+    }
 
     private radioChange(e: any) {
         console.log('e:::', e)
@@ -304,17 +321,33 @@ export default class Poll extends Vue {
         }
     }
 
-    private formSubmit(e: any) {
+    private async formSubmit(e: any) {
+        /**
+         * 1. 校验数据
+         * 2. 上传数据
+         * 3. 预付接口
+         * 4. 跳转页面
+         */
         console.log('form发生了submit事件，携带数据为：' + JSON.stringify(e.detail.value))
         const formdata = e.detail.value
-        uni.showModal({
-            content: '表单数据内容：' + JSON.stringify(formdata),
-            showCancel: false,
-            success: res => {
-                console.log(`res:::`, res)
-                uni.navigateTo({url: `/pages/payment/payment`})
-            }
+        if (!this.isValidate(formdata)) {
+            return
+        }
+        const res = await api.poll.uploadAnswer({
+            ...formdata,
+            losingWeightWays: JSON.stringify(formdata.losingWeightWays),
+            eatRegularly: JSON.stringify(formdata.eatRegularly)
+
+        }).catch((err: any) => {
+            uni.showModal({content: `数据上传错误` + JSON.stringify(err)})
+            return
         })
+        console.log('上传成功返回:::', res)
+        const prepayInfo = await PrepayStoreModule.getPrepayInfo()
+        if (!prepayInfo) {
+            return
+        }
+        uni.navigateTo({url: `/pages/payment/payment`})
     }
 
     private checkboxChange(e: any) {
@@ -392,6 +425,19 @@ export default class Poll extends Vue {
         const re = /\d+/
         return re.test(num)
 
+    }
+
+    private isValidate(formdata: any) {
+        for (const key of Object.keys(formdata)) {
+            if (formdata.hasOwnProperty(key)) {
+                if (formdata[key].length === 0) {
+                    console.log(`${key} is empty`)
+                    uni.showModal({content: `没有填写完整`, showCancel: false})
+                    return false
+                }
+            }
+        }
+        return true
     }
 }
 </script>
