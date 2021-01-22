@@ -8,7 +8,6 @@
 import Vue from 'vue'
 import App from './App.vue'
 import './assets/css/tailwind.css' //引入tailwind
-// import './assets/css/font-awesome.css'
 import uView from "uview-ui";
 Vue.use(uView);
 
