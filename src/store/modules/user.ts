@@ -18,16 +18,20 @@ export default class UserStore extends VuexModule {
         this.loginInfo = user
     }
 
-    @Action({commit: 'USERINFO'})
-    async getUserinfo(): Promise<User> {
+    @Action
+    async getUserinfo() {
         const [err, res]: any = await uni.login({
             provider: 'weixin',
         })
+        console.log('用户登录:::', res)
         const {openId, token: token1, unionId, wasBuy} = await api.user.wxMaLogin(res.code)
+            .catch((err: any) => {
+                console.log('获取用户信息错误', err)
+            })
         token.set(token1)
-        return {
+        this.context.commit('USERINFO', {
             token: token1, openId, unionId, wasBuy
-        }
+        })
     }
 }
 // 使用getModule: 对类型安全的访问
