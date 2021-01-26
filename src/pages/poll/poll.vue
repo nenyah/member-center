@@ -102,7 +102,6 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator'
 import api from '@/api'
-import {PrepayStoreModule} from '@/store/modules/payment'
 
 @Component
 export default class Poll extends Vue {
@@ -333,20 +332,20 @@ export default class Poll extends Vue {
         if (!this.isValidate(formdata)) {
             return
         }
-        const res = await api.poll.uploadAnswer({
-            ...formdata,
-            losingWeightWays: JSON.stringify(formdata.losingWeightWays),
-            eatRegularly: JSON.stringify(formdata.eatRegularly)
+        try {
+            const res = await api.poll.uploadAnswer({
+                ...formdata,
+                losingWeightWays: JSON.stringify(formdata.losingWeightWays),
+                eatRegularly: JSON.stringify(formdata.eatRegularly)
 
-        }).catch((err: any) => {
+            })
+            console.log('上传成功返回:::', res)
+        } catch (err) {
             uni.showModal({content: `数据上传错误` + JSON.stringify(err)})
             return
-        })
-        console.log('上传成功返回:::', res)
-        const prepayInfo = await PrepayStoreModule.getPrepayInfo()
-        if (!prepayInfo) {
-            return
         }
+
+
         uni.navigateTo({url: `/pages/payment/payment`})
     }
 

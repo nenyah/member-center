@@ -3,14 +3,13 @@ import {appConfig} from '@/common/config'
 
 interface IParams {
     url: string
-    method?: 'GET' | 'POST' | 'PUT'
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
     base_url?: boolean
     data?: any
 }
 
 interface Config {
     'Content-Type': string
-
     [x: string]: string
 }
 
@@ -64,5 +63,8 @@ export default {
     },
     get: (url: string, data: any) => {
         return send({url, data, method: 'GET'})
+    },
+    delete(url: string, data: any) {
+        return send({url, data, method: 'DELETE'})
     }
 }
