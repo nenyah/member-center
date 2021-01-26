@@ -98,6 +98,7 @@
 import {Component, Emit, Prop, Vue} from 'vue-property-decorator'
 import poi from '@/common/address'
 import api from '@/api'
+import {PaymentStoreModule} from '@/store/modules/payment'
 
 type Error = {
     [index: string]: string
@@ -179,7 +180,8 @@ export default class AddressInfo extends Vue {
         /**
          * 1. 验证输入内容是否合法
          * 2. 验证是否同意 checked=true
-         * 3. 上传表单信息，成功后跳转页面
+         * 3. 上传表单信息，保存表单信息
+         * 4. 成功后跳转页面
          */
         const value: Value = e.detail.value
         // 1. 验证输入内容是否合法
@@ -194,14 +196,16 @@ export default class AddressInfo extends Vue {
             })
             return
         }
+        const reciver = {
+            username: value.name,
+            mobile: value.phone,
+            province: value.province,
+            city: value.city,
+            detailPlace: value.address
+        }
         try {
-            await api.reciver.updateReceiver({
-                username: value.name,
-                mobile: value.phone,
-                province: value.province,
-                city: value.city,
-                detailPlace: value.address
-            })
+            await api.reciver.updateReceiver(reciver)
+            PaymentStoreModule.RECIEVERINFO(reciver)
         } catch (err) {
             uni.showModal({content: `提交失败请重试` + JSON.stringify(err), showCancel: false})
             return
