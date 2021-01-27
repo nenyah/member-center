@@ -7,6 +7,7 @@
 -->
 <script lang="ts">
 import Vue from 'vue';
+import {UserStoreModule} from '@/store/modules/user'
 
 export default Vue.extend({
 	mpType: 'app',
@@ -15,6 +16,7 @@ export default Vue.extend({
 	},
 	onShow() {
 		console.log('App Show');
+        UserStoreModule.getUserinfo()
 	},
 	onHide() {
 		console.log('App Hide');

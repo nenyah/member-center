@@ -72,7 +72,7 @@ export default class Index extends Vue {
          * 3. 是否已经申请过
          * 4. 弹窗填写信息
          */
-        UserStoreModule.getUserinfo()
+        // UserStoreModule.getUserinfo()
         if (!this.isLogin()) {
             console.log(`没有登录`)
             return
