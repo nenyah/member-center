@@ -18,7 +18,7 @@
                 活动规则
             </view>
         </view>
-        <view class="mb-10 w-full" v-if="!showModal">
+        <view class="mb-20 w-full" v-if="!showModal">
             <official-account></official-account>
         </view>
         <!--        询问按钮-->
