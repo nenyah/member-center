@@ -3,15 +3,6 @@
         <form @submit="formSubmit" class="bg-white shadow rounded p-5">
             <view class="text-center font-bold my-1">膳见纤玺减脂调研问卷</view>
             <view class="my-1 text-sm">{{ question.formDeclare }}</view>
-            <!--            <view v-if="errors.length" class="text-red-500 text-sm">-->
-            <!--                <view>输入不合法，请修改后提交：</view>-->
-            <!--                <view-->
-            <!--                    v-for="(error,index) in errors"-->
-            <!--                    :key="index"-->
-            <!--                >-->
-            <!--                    {{ error }}-->
-            <!--                </view>-->
-            <!--            </view>-->
             <view
                 v-for="(item,index) in question.formData"
                 :key="index"
@@ -21,12 +12,13 @@
                         {{ item.label }}
                     </view>
                     <view v-if="item.key!=='gender'" class="flex">
-                        <input :type="item.key!=='username'?'number':'text'"
-                               :placeholder="item.value"
-                               :name="item.key"
-                               :value="item.value"
-                               placeholder-class="border border-r-0 border-t-0 border-l-0 border-solid border-gray-300"
-                        >
+                        <view class="border border-r-0 border-t-0 border-l-0 border-solid border-gray-300">
+                            <input :type="item.key!=='username'?'number':'text'"
+                                   :placeholder="item.value"
+                                   :name="item.key"
+                                   :value="item.value"
+                            >
+                        </view>
                         <view>{{ item.key|appendix }}</view>
                     </view>
                     <view v-else>
