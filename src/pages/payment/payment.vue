@@ -197,6 +197,12 @@ export default class Payment extends Vue {
     }
 
     private async payOrder() {
+        await uni.requestSubscribeMessage({
+            tmplIds: [
+                'fiwe4b07cph5nar6gZ1VWe2WljHMn7mVIaWZfK5oAik',
+                'RQIZhmyOuzD5Uwq4sANSIbAcvHBPL4xREzlYFKU4uhs'
+            ]
+        })
         try {
             await this.genPreOrder()
         } catch (e) {
