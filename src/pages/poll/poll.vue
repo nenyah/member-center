@@ -1,6 +1,6 @@
 <template>
-    <view class="bg-theme p-10 flex flex-col items-center text-base">
-        <form @submit="formSubmit" class="bg-white shadow rounded p-10">
+    <view class="bg-theme p-5 flex flex-col items-center text-base">
+        <form @submit="formSubmit" class="bg-white shadow rounded p-5">
             <view class="text-center font-bold my-1">膳见纤玺减脂调研问卷</view>
             <view class="my-1 text-sm">{{ question.formDeclare }}</view>
             <!--            <view v-if="errors.length" class="text-red-500 text-sm">-->
@@ -21,34 +21,24 @@
                         {{ item.label }}
                     </view>
                     <view v-if="item.key!=='gender'" class="flex">
-                        <input type="number"
+                        <input :type="item.key!=='username'?'number':'text'"
                                :placeholder="item.value"
                                :name="item.key"
                                :value="item.value"
-                               v-if="item.key!=='username'"
+                               placeholder-class="border border-r-0 border-t-0 border-l-0 border-solid border-gray-300"
                         >
-                        <input type="text"
-                               :placeholder="item.value"
-                               :name="item.key"
-                               :value="item.value"
-                               v-else
-                        >
-                        <view v-if="item.key.endsWith('eight')">kg</view>
-                        <view v-else-if="item.key==='stature' || item.key==='waistline'">cm</view>
+                        <view>{{ item.key|appendix }}</view>
                     </view>
                     <view v-else>
+                        <!-- 性别-->
                         <radio-group @change="radioChange" :name="item.key" class="flex">
                             <label v-for="(value,index) in item.value"
                                    :key="index"
                                    class="flex mx-5"
                             >
-                                <view>
-                                    <radio :value="value.value" :checked="value.checked" color="red"
-                                           style="transform:scale(0.7)"/>
-                                </view>
-                                <view>
-                                    {{ value.label }}
-                                </view>
+                                <radio :value="value.value" :checked="value.checked" color="red"
+                                       style="transform:scale(0.7)"/>
+                                {{ value.label }}
                             </label>
                         </radio-group>
                     </view>
@@ -103,7 +93,19 @@
 import {Component, Vue} from 'vue-property-decorator'
 import api from '@/api'
 
-@Component
+@Component({
+    filters: {
+        appendix: (value: string) => {
+            return value.endsWith('eight')
+                   ? 'kg'
+                   : value === 'age'
+                     ? '岁'
+                     : value === 'stature' || value === 'waistline'
+                       ? 'cm'
+                       : ''
+        }
+    }
+})
 export default class Poll extends Vue {
     private question = {
         formDeclare: '本次问卷不涉及您的个人隐私，仅作为您使用产品前后的数据对比参照，请您如实填写。',
@@ -307,7 +309,6 @@ export default class Poll extends Vue {
     }
 
     private radioChange(e: any) {
-        console.log('e:::', e)
         let formdata = this.question.formData,
             values = e.detail.value
         for (let i = 0, lenI = formdata.length; i < lenI; ++i) {
@@ -335,8 +336,8 @@ export default class Poll extends Vue {
         try {
             const res = await api.poll.uploadAnswer({
                 ...formdata,
-                losingWeightWays: JSON.stringify(formdata.losingWeightWays),
-                eatRegularly: JSON.stringify(formdata.eatRegularly)
+                losingWeightWays: formdata.losingWeightWays.toString(),
+                eatRegularly: formdata.eatRegularly.toString()
 
             })
             console.log('上传成功返回:::', res)
@@ -344,8 +345,6 @@ export default class Poll extends Vue {
             uni.showModal({content: `数据上传错误` + JSON.stringify(err)})
             return
         }
-
-
         uni.navigateTo({url: `/pages/payment/payment`})
     }
 

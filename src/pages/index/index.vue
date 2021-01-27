@@ -23,7 +23,7 @@
         </view>
         <!--        询问按钮-->
         <view
-            class="fixed left-0 bottom-0 w-full py-2 box-border text-white text-center"
+            class="fixed left-0 bottom-0 w-full py-5 box-border text-white text-center text-lg"
             style="background-color:#ad3d3b;"
             @click="applyGift"
         >
