@@ -200,7 +200,7 @@ export default class Payment extends Vue {
         await uni.requestSubscribeMessage({
             tmplIds: [
                 'fiwe4b07cph5nar6gZ1VWe2WljHMn7mVIaWZfK5oAik',
-                'RQIZhmyOuzD5Uwq4sANSIbAcvHBPL4xREzlYFKU4uhs'
+                'RQIZhmyOuzD5Uwq4sANSIS5MJv1ZXEUCfa3R2NUQGkM'
             ]
         })
         try {
