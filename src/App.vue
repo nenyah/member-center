@@ -36,4 +36,7 @@ $theme-color: #be3136;
 .text-emphasize {
 	color: #ed7d31;
 }
+.text-pink-100 {
+    color: #ee8d60;
+}
 </style>
