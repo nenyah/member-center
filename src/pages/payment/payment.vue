@@ -16,13 +16,13 @@
         <view class="flex px-5 py-2 mt-1 mb-10 bg-white">
             <!-- 产品图片 -->
             <view class="flex justify-center items-center">
-                <image :src="productImg" mode="widthFix" class="w-10 h-10"></image>
+                <image :src="product.imgUrl" mode="widthFix" class="w-10 h-10"></image>
             </view>
             <!-- 产品信息 -->
             <view class="ml-5">
-                <view class="font-bold">{{ product.title }} ￥ 0 元</view>
-                <view>邮费: {{ product.price|money }} 元</view>
-                <view>合计: {{ product.price|money }} 元</view>
+                <view class="font-bold">{{ product.name }} ({{ product.spec }}) ￥ 0 元</view>
+                <view>邮费: {{ orderPrice|money }} 元</view>
+                <view>合计: {{ orderPrice|money }} 元</view>
             </view>
         </view>
 
@@ -41,7 +41,7 @@
             <!-- 标题 -->
             <view class="py-2 font-bold text-center">
                 <view class="text-sm">膳见纤玺{{ orderNum }}号订单</view>
-                <view class="text-2xl">{{ product.price|money }}</view>
+                <view class="text-2xl">{{ orderPrice|money }}</view>
             </view>
             <!-- 收款方 -->
             <view
@@ -52,22 +52,34 @@
         </view>
 
         <u-button @click="payOrder" type="success" :custom-style="shareStyle" hover-class="">
-            确认支付 {{ product.price|money }}
+            确认支付 {{ orderPrice|money }}
         </u-button>
     </view>
-    <view v-else-if="paymentStatus==='success'" class="h-full flex flex-col justify-center items-center">
-        <view class="text-center mb-10">
-            <view class="fa fa-check-circle text-theme text-3xl"></view>
-            <view class="font-bold text-lg">恭喜下单成功，请耐心等待</view>
+    <view v-else-if="paymentStatus==='success'" class="h-full success-bg pt-40">
+        <view class="text-center ">
+            <view class="text-lg text-white">
+                恭喜您！
+                <text>\n</text>
+                已完成邮费支付
+            </view>
         </view>
-        <view class="text-center mb-10 text-base">
-            <view>订单号：{{ orderNum }}</view>
-            <view>金额：{{ product.price|money }}</view>
-            <view class="text-sm">猛戳下方按钮 ↓</view>
+        <view class="text-center mt-40 mb-5 text-base text-theme">
+            <view class="text-sm">
+                膳见纤玺
+                <text>\n</text>
+                将在7个工作日内为您寄出代餐食品
+            </view>
         </view>
-        <view>
-            <u-button type="primary" shape="circle" :custom-style="shareStyle" @click="sharePoster">分享给好友</u-button>
-            <u-button type="primary" shape="circle" :custom-style="backStyle" @click="goIndex">返回首页</u-button>
+        <view class="px-20">
+            <u-button
+                type="primary"
+                shape="circle"
+                :custom-style="shareStyle"
+                :ripple="true"
+                @click="sharePoster"
+            >
+                分享给好友
+            </u-button>
         </view>
         <u-modal
             v-model="show"
@@ -99,6 +111,7 @@ import uniCountdown from '@/components/uni-countdown/uni-countdown.vue'
 import {PaymentStoreModule} from '@/store/modules/payment'
 import api from '@/api'
 import {appConfig} from '@/common/config'
+import {Goods} from '@/common/interface'
 
 type PaymentStatus = 'prepay' | 'paying' | 'success' | 'fail'
 @Component({
@@ -112,9 +125,9 @@ type PaymentStatus = 'prepay' | 'paying' | 'success' | 'fail'
     }
 })
 export default class Payment extends Vue {
-    private product = appConfig.product
-    private pimg = 'https://dev.huadongbio.com:8505/wechat/share-poster.jpg'
-    private productImg = appConfig.productImg
+    private product: Goods = {} as Goods
+    private pimg = appConfig.postImg
+    private orderPrice = appConfig.orderPrice
     private paymentStatus: PaymentStatus = 'prepay'
     private orderNum = '00000000000000'
     private shareStyle = {
@@ -131,26 +144,39 @@ export default class Payment extends Vue {
         return PaymentStoreModule.reciverInfo
     }
 
+    async onLoad() {
+        this.product = await api.goods.info(appConfig.productId).catch((err: any) => {
+            uni.showToast({title: `获取产品信息失败` + JSON.stringify(err)})
+        })
+    }
+
     async genOrder() {
         /**
          * 1. 生成系统订单
          * 2. 生成预付单
          * @type {Prepay}
          */
-
         try {
             this.orderNum = await api.payment.createOrder({
                 username: this.reciver.username,
                 mobile: this.reciver.mobile,
                 address: this.reciver.province + this.reciver.city + this.reciver.detailPlace,
-                description: this.product.title,
-                amount: appConfig.product.price,
+                description: this.product.name + this.product.spec,
+                amount: appConfig.orderPrice,
             })
-            console.log('生成订单成功:::', this.orderNum)
             this.paymentStatus = 'paying'
         } catch (e) {
-            console.log('生成订单错误:::', e)
-            throw new Error('生成订单错误:::')
+            uni.showModal({content: `生成订单错误` + JSON.stringify(e)})
+        }
+    }
+
+    onShareAppMessage(res: any) {
+        if (res.from === 'button') {// 来自页面内分享按钮
+            console.log(res.target)
+        }
+        return {
+            title: '免费试用，我已经参加了，你快来',
+            path: '/pages/index/index'
         }
     }
 
@@ -158,7 +184,6 @@ export default class Payment extends Vue {
         try {
             await PaymentStoreModule.getPrepayInfo(this.orderNum)
         } catch (e) {
-            console.log('生成预付单失败:::', e)
             throw new Error('生成预付单失败:::')
         }
     }
@@ -206,7 +231,6 @@ export default class Payment extends Vue {
         try {
             await this.genPreOrder()
         } catch (e) {
-            console.log('生成订单失败', e)
             return
         }
         // #ifdef  MP-WEIXIN
@@ -244,11 +268,6 @@ export default class Payment extends Vue {
         this.show = true
     }
 
-    private goIndex() {
-        uni.redirectTo({
-            url: `/pages/index/index`
-        })
-    }
 
     private async confirm() {
         uni.downloadFile({
@@ -291,5 +310,8 @@ export default class Payment extends Vue {
 </script>
 
 <style lang="scss" scoped>
-
+.success-bg {
+    background: url("http://dev.huadongbio.com:8500/shanjian-app/success-bg.png");
+    background-size: cover;
+}
 </style>
