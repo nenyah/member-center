@@ -13,3 +13,13 @@ export interface Prepay {
     mch_order_num: string
     package: string
 }
+
+export interface Goods {
+    id: string
+    name: string
+    unitPrice: number
+    spec: string
+    description: string
+    imgUrl: string
+    remark: string
+}
