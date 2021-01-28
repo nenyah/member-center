@@ -19,7 +19,7 @@ export default {
         return http.post(`wechat/order/prepay`, orderNum)
     },
     orderStatus: (orderNum: string): Promise<StatusResponse> => {
-        return http.post(`order/status`, {orderNum})
+        return http.get(`order/status`, {orderNum})
     },
     createOrder: (orderData: OrderData): Promise<string> => {
         return http.post(`order`, orderData)
