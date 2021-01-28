@@ -7,68 +7,58 @@
                 v-for="(item,index) in question.formData"
                 :key="index"
             >
-                <view v-if="index<7" class="flex">
-                    <view class="flex-none">
-                        {{ item.label }}
+                <view v-if="item.type==='input'" class="my-1 flex">
+                    <view class="flex-shrink-0">
+                        {{ index + 1 }}. {{ `${item.label}` }}
                     </view>
-                    <view v-if="item.key!=='gender'" class="flex">
-                        <view class="border border-r-0 border-t-0 border-l-0 border-solid border-gray-300">
-                            <input :type="item.key!=='username'?'number':'text'"
-                                   :placeholder="item.value"
-                                   :name="item.key"
-                                   :value="item.value"
-                            >
-                        </view>
-                        <view>{{ item.key|appendix }}</view>
+                    <view class="border border-solid border-gray-300 w-20">
+                        <input :type="item.key!=='username'?'number':'text'"
+                               :placeholder="item.value"
+                               :name="item.key"
+                               :value="item.value"
+                               class="px-2"
+                        >
                     </view>
-                    <view v-else>
-                        <!-- 性别-->
-                        <radio-group @change="radioChange" :name="item.key" class="flex">
-                            <label v-for="(value,index) in item.value"
-                                   :key="index"
-                                   class="flex mx-5"
-                            >
-                                <radio :value="value.value" :checked="value.checked" color="red"
-                                       style="transform:scale(0.7)"/>
-                                {{ value.label }}
-                            </label>
-                        </radio-group>
+                    <view>
+                        {{ item.key|appendix }}
                     </view>
                 </view>
-                <view v-else>
-                    <view v-if="item.type==='radio'" class="my-5">
-                        <view>
-                            {{ index - 6 }}. {{ item.label }}
-                        </view>
-                        <radio-group @change="radioChange" :name="item.key">
-                            <label v-for="(value,index) in item.value"
-                                   :key="index"
-                                   class="flex"
-                            >
-                                <view>
-                                    <radio :value="value.value" :checked="value.checked" color="red"
-                                           style="transform:scale(0.7)"/>
-                                </view>
-                                <view>{{ value.label }}</view>
-                            </label>
-                        </radio-group>
+                <view v-else-if="item.type==='radio'" class="my-1">
+                    <view>
+                        {{ index + 1 }}. {{ item.key === 'gender' ? `${item.label}` : item.label }}
                     </view>
-                    <view v-else-if="item.type==='checkbox'" class="my-5">
-                        <view>{{ index - 6 }}. {{ item.label }}</view>
-                        <checkbox-group
-                            @change="checkboxChange"
-                            class="flex flex-col"
-                            :name="item.key"
+                    <radio-group
+                        @change="radioChange"
+                        :name="item.key"
+                        :class="item.key==='gender'?'flex':''"
+                    >
+                        <label v-for="(value,index) in item.value"
+                               :key="index"
+                               class="flex"
                         >
-                            <label v-for="(value,index) in item.value"
-                                   :key="index"
-                            >
-                                <checkbox :value="value.value" :checked="value.checked" color="red"
-                                          style="transform:scale(0.7)"/>
-                                {{ value.label }}
-                            </label>
-                        </checkbox-group>
-                    </view>
+                            <view>
+                                <radio :value="value.value" :checked="value.checked" color="red"
+                                       style="transform:scale(0.7)"/>
+                            </view>
+                            <view>{{ value.label }}</view>
+                        </label>
+                    </radio-group>
+                </view>
+                <view v-else-if="item.type==='checkbox'" class="my-1">
+                    <view>{{ index + 1 }}. {{ item.label }}</view>
+                    <checkbox-group
+                        @change="checkboxChange"
+                        class="flex flex-col"
+                        :name="item.key"
+                    >
+                        <label v-for="(value,index) in item.value"
+                               :key="index"
+                        >
+                            <checkbox :value="value.value" :checked="value.checked" color="red"
+                                      style="transform:scale(0.7)"/>
+                            {{ value.label }}
+                        </label>
+                    </checkbox-group>
                 </view>
             </view>
             <button
@@ -89,11 +79,11 @@ import api from '@/api'
     filters: {
         appendix: (value: string) => {
             return value.endsWith('eight')
-                   ? 'kg'
+                   ? '千克'
                    : value === 'age'
                      ? '岁'
                      : value === 'stature' || value === 'waistline'
-                       ? 'cm'
+                       ? '厘米'
                        : ''
         }
     }
