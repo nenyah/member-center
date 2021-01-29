@@ -20,7 +20,6 @@ export default class PaymentStore extends VuexModule {
         nonceStr: '',
         signType: '',
         paySign: '',
-        mch_order_num: '',
         package: ''
     }
     public reciverInfo: Reciver = {

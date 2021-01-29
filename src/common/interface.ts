@@ -10,7 +10,6 @@ export interface Prepay {
     nonceStr: string
     signType: string
     paySign: string
-    mch_order_num: string
     package: string
 }
 

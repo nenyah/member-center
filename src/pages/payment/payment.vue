@@ -245,7 +245,7 @@ export default class Payment extends Vue {
                 if (res.errMsg.includes('requestPayment:ok')) {
                     //    支付成功，调用接口查询后台订单状态
                     const res = await api.payment.orderStatus(
-                        `${PaymentStoreModule.prepayInfo.mch_order_num}`
+                        `${this.orderNum}`
                     )
                         .catch((err: any) => {
                             this.paymentStatus = 'fail'
